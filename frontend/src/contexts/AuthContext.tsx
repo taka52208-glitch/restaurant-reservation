@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import type { User, LoginCredentials, AuthState } from '../types';
+import { authApi } from '../api';
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
@@ -8,7 +9,7 @@ interface AuthContextType extends AuthState {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for development
+// Mock users for development (when API is not available)
 const MOCK_USERS: Record<string, { password: string; user: User }> = {
   'customer@reservation.local': {
     password: 'Customer123!',
@@ -17,8 +18,9 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
       email: 'customer@reservation.local',
       name: '山田 太郎',
       role: 'customer',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
   },
   'store@reservation.local': {
@@ -28,8 +30,9 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
       email: 'store@reservation.local',
       name: '鈴木 花子（店舗オーナー）',
       role: 'store',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
   },
   'admin@reservation.local': {
@@ -39,8 +42,9 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
       email: 'admin@reservation.local',
       name: '管理者',
       role: 'admin',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
   },
 };
@@ -70,31 +74,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>(getInitialAuthState);
 
   const login = async (credentials: LoginCredentials): Promise<void> => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      // Try real API first
+      const { token, user } = await authApi.login(credentials);
 
-    const mockUser = MOCK_USERS[credentials.email];
+      if (credentials.rememberMe) {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);
+      } else {
+        sessionStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('token', token);
+      }
 
-    if (!mockUser || mockUser.password !== credentials.password) {
-      throw new Error('メールアドレスまたはパスワードが正しくありません');
+      setState({
+        user,
+        token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch {
+      // Fallback to mock auth for development
+      console.warn('API not available, using mock auth');
+
+      const mockUser = MOCK_USERS[credentials.email];
+      if (!mockUser || mockUser.password !== credentials.password) {
+        throw new Error('メールアドレスまたはパスワードが正しくありません');
+      }
+
+      const token = 'mock-jwt-token-' + Date.now();
+
+      if (credentials.rememberMe) {
+        localStorage.setItem('user', JSON.stringify(mockUser.user));
+        localStorage.setItem('token', token);
+      } else {
+        sessionStorage.setItem('user', JSON.stringify(mockUser.user));
+        sessionStorage.setItem('token', token);
+      }
+
+      setState({
+        user: mockUser.user,
+        token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
     }
-
-    const token = 'mock-jwt-token-' + Date.now();
-
-    if (credentials.rememberMe) {
-      localStorage.setItem('user', JSON.stringify(mockUser.user));
-      localStorage.setItem('token', token);
-    } else {
-      sessionStorage.setItem('user', JSON.stringify(mockUser.user));
-      sessionStorage.setItem('token', token);
-    }
-
-    setState({
-      user: mockUser.user,
-      token,
-      isAuthenticated: true,
-      isLoading: false,
-    });
   };
 
   const logout = () => {
