@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飲食店予約サイト - デザインテーマセレクター</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .theme-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .theme-content {
+            display: none;
+        }
+
+        .theme-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .theme-info {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .theme-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .theme-info p {
+            font-size: 1.05rem;
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .color-item {
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .color-name {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 0.25rem;
+        }
+
+        .color-code {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            font-family: monospace;
+        }
+
+        .preview-frame {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        /* Theme 1: Modern Minimal */
+        .theme-minimal .mock-app {
+            background: #f7fafc;
+        }
+
+        .theme-minimal .mock-header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .theme-minimal .mock-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .theme-minimal .mock-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .theme-minimal .mock-nav-item {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .theme-minimal .mock-nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .theme-minimal .mock-search {
+            padding: 2.5rem 2rem;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .theme-minimal .search-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .theme-minimal .search-bar {
+            display: flex;
+            gap: 1rem;
+            max-width: 900px;
+        }
+
+        .theme-minimal .search-input {
+            flex: 1;
+            padding: 0.875rem 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .theme-minimal .search-input:focus {
+            outline: none;
+            border-color: #2d3748;
+            box-shadow: 0 0 0 3px rgba(45, 55, 72, 0.1);
+        }
+
+        .theme-minimal .search-btn {
+            background: #2d3748;
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-minimal .search-btn:hover {
+            background: #1a202c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 55, 72, 0.3);
+        }
+
+        .theme-minimal .mock-content {
+            padding: 2rem;
+        }
+
+        .theme-minimal .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .theme-minimal .restaurant-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .theme-minimal .restaurant-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .theme-minimal .restaurant-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #cbd5e0 0%, #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .theme-minimal .restaurant-info {
+            padding: 1.25rem;
+        }
+
+        .theme-minimal .restaurant-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-minimal .restaurant-desc {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .theme-minimal .restaurant-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .theme-minimal .tag {
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .theme-minimal .book-btn {
+            width: 100%;
+            background: #2d3748;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-minimal .book-btn:hover {
+            background: #1a202c;
+        }
+
+        /* Theme 2: Warm Hospitality */
+        .theme-warm .mock-app {
+            background: #fffaf5;
+        }
+
+        .theme-warm .mock-header {
+            background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+        }
+
+        .theme-warm .mock-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .theme-warm .mock-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .theme-warm .mock-nav-item {
+            color: rgba(255,255,255,0.95);
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.2s;
+        }
+
+        .theme-warm .mock-nav-item:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .theme-warm .mock-search {
+            padding: 3rem 2rem;
+            background: linear-gradient(to bottom, #fff7ed 0%, #fffaf5 100%);
+        }
+
+        .theme-warm .search-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #9a3412;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .theme-warm .search-subtitle {
+            text-align: center;
+            color: #c2410c;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .theme-warm .search-bar {
+            display: flex;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .theme-warm .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #fed7aa;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .theme-warm .search-input:focus {
+            outline: none;
+            border-color: #ea580c;
+            box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
+        }
+
+        .theme-warm .search-btn {
+            background: #ea580c;
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+
+        .theme-warm .search-btn:hover {
+            background: #c2410c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
+        }
+
+        .theme-warm .mock-content {
+            padding: 2rem;
+        }
+
+        .theme-warm .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .theme-warm .restaurant-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .theme-warm .restaurant-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(234, 88, 12, 0.15);
+        }
+
+        .theme-warm .restaurant-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #fed7aa 0%, #ffedd5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .theme-warm .restaurant-info {
+            padding: 1.5rem;
+        }
+
+        .theme-warm .restaurant-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #9a3412;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-warm .restaurant-desc {
+            font-size: 0.95rem;
+            color: #78350f;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .theme-warm .restaurant-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .theme-warm .tag {
+            background: #ffedd5;
+            color: #c2410c;
+            padding: 0.3rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .theme-warm .book-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 0.875rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-warm .book-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+
+        /* Theme 3: Premium Luxury */
+        .theme-luxury .mock-app {
+            background: #0f1419;
+        }
+
+        .theme-luxury .mock-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(203, 163, 98, 0.2);
+        }
+
+        .theme-luxury .mock-logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #cba362;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .theme-luxury .mock-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .theme-luxury .mock-nav-item {
+            color: rgba(203, 163, 98, 0.9);
+            font-size: 0.9rem;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .theme-luxury .mock-nav-item:hover {
+            border-bottom-color: #cba362;
+        }
+
+        .theme-luxury .mock-search {
+            padding: 4rem 2rem;
+            background: linear-gradient(to bottom, #1e293b 0%, #0f1419 100%);
+            position: relative;
+        }
+
+        .theme-luxury .mock-search::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><path d="M0,50 Q250,30 500,50 T1000,50 L1000,100 L0,100 Z" fill="%230f1419"/></svg>') no-repeat bottom;
+            background-size: 100% 100px;
+            pointer-events: none;
+        }
+
+        .theme-luxury .search-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #cba362;
+            margin-bottom: 0.75rem;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        .theme-luxury .search-subtitle {
+            text-align: center;
+            color: rgba(203, 163, 98, 0.7);
+            margin-bottom: 2.5rem;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+        }
+
+        .theme-luxury .search-bar {
+            display: flex;
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .theme-luxury .search-input {
+            flex: 1;
+            padding: 1.125rem 1.75rem;
+            border: 2px solid rgba(203, 163, 98, 0.3);
+            border-radius: 0;
+            font-size: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            color: #cba362;
+            transition: all 0.3s;
+        }
+
+        .theme-luxury .search-input::placeholder {
+            color: rgba(203, 163, 98, 0.5);
+        }
+
+        .theme-luxury .search-input:focus {
+            outline: none;
+            border-color: #cba362;
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .theme-luxury .search-btn {
+            background: linear-gradient(135deg, #cba362 0%, #b8935a 100%);
+            color: #0f172a;
+            border: none;
+            padding: 1.125rem 3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .theme-luxury .search-btn:hover {
+            background: linear-gradient(135deg, #d4af6e 0%, #cba362 100%);
+            box-shadow: 0 8px 20px rgba(203, 163, 98, 0.3);
+        }
+
+        .theme-luxury .mock-content {
+            padding: 3rem 2rem;
+        }
+
+        .theme-luxury .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .theme-luxury .restaurant-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(203, 163, 98, 0.2);
+            position: relative;
+        }
+
+        .theme-luxury .restaurant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(203, 163, 98, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .theme-luxury .restaurant-card:hover::before {
+            opacity: 1;
+        }
+
+        .theme-luxury .restaurant-card:hover {
+            transform: translateY(-6px);
+            border-color: #cba362;
+            box-shadow: 0 12px 32px rgba(203, 163, 98, 0.15);
+        }
+
+        .theme-luxury .restaurant-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border-bottom: 1px solid rgba(203, 163, 98, 0.2);
+        }
+
+        .theme-luxury .restaurant-info {
+            padding: 1.75rem;
+            position: relative;
+        }
+
+        .theme-luxury .restaurant-name {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #cba362;
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .theme-luxury .restaurant-desc {
+            font-size: 0.95rem;
+            color: rgba(203, 163, 98, 0.7);
+            margin-bottom: 1.25rem;
+            line-height: 1.7;
+        }
+
+        .theme-luxury .restaurant-tags {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+
+        .theme-luxury .tag {
+            background: transparent;
+            color: #cba362;
+            padding: 0.35rem 1rem;
+            border: 1px solid rgba(203, 163, 98, 0.3);
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .theme-luxury .book-btn {
+            width: 100%;
+            background: transparent;
+            color: #cba362;
+            border: 2px solid #cba362;
+            padding: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .theme-luxury .book-btn:hover {
+            background: #cba362;
+            color: #0f172a;
+        }
+
+        /* Theme 4: Fresh & Vibrant */
+        .theme-vibrant .mock-app {
+            background: linear-gradient(to bottom, #fef3c7 0%, #fef9c3 100%);
+        }
+
+        .theme-vibrant .mock-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .theme-vibrant .mock-logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .theme-vibrant .mock-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .theme-vibrant .mock-nav-item {
+            color: white;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 0.625rem 1.25rem;
+            border-radius: 25px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .theme-vibrant .mock-nav-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .theme-vibrant .mock-search {
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            position: relative;
+        }
+
+        .theme-vibrant .search-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #065f46;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .theme-vibrant .search-subtitle {
+            text-align: center;
+            color: #047857;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .theme-vibrant .search-bar {
+            display: flex;
+            gap: 1rem;
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+        }
+
+        .theme-vibrant .search-input {
+            flex: 1;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        .theme-vibrant .search-input:focus {
+            outline: none;
+        }
+
+        .theme-vibrant .search-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.875rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .theme-vibrant .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+        }
+
+        .theme-vibrant .mock-content {
+            padding: 2rem;
+        }
+
+        .theme-vibrant .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .theme-vibrant .restaurant-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 3px solid transparent;
+        }
+
+        .theme-vibrant .restaurant-card:hover {
+            transform: translateY(-8px) rotate(-1deg);
+            box-shadow: 0 16px 32px rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+
+        .theme-vibrant .restaurant-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+        }
+
+        .theme-vibrant .restaurant-info {
+            padding: 1.5rem;
+        }
+
+        .theme-vibrant .restaurant-name {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #065f46;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-vibrant .restaurant-desc {
+            font-size: 0.95rem;
+            color: #047857;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .theme-vibrant .restaurant-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .theme-vibrant .tag {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            padding: 0.35rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .theme-vibrant .book-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.875rem;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .theme-vibrant .book-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.9rem;
+            }
+
+            .theme-info {
+                padding: 1.5rem;
+            }
+
+            .color-palette {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .restaurant-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .mock-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .mock-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>飲食店予約サイト - デザインテーマ選択</h1>
+            <p>4つの個性的なデザインテーマから、あなたのビジョンに最適なものをお選びください</p>
+        </div>
+
+        <div class="theme-tabs">
+            <button class="tab-btn active" data-theme="minimal">Modern Minimal</button>
+            <button class="tab-btn" data-theme="warm">Warm Hospitality</button>
+            <button class="tab-btn" data-theme="luxury">Premium Luxury</button>
+            <button class="tab-btn" data-theme="vibrant">Fresh & Vibrant</button>
+        </div>
+
+        <!-- Theme 1: Modern Minimal -->
+        <div class="theme-content active" id="theme-minimal">
+            <div class="theme-info">
+                <h2>Theme 1: Modern Minimal</h2>
+                <p><strong>コンセプト:</strong> 洗練されたシンプルさと機能美を追求したデザイン。無駄を削ぎ落とし、情報の見やすさと操作のしやすさを最優先。ビジネスライクでプロフェッショナルな印象を与えます。</p>
+                <p><strong>推奨ターゲット:</strong> 効率重視のビジネスパーソン、都市部の若年層、スタイリッシュなブランドイメージを求める店舗</p>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #2d3748;">カラーパレット</h3>
+                <div class="color-palette">
+                    <div class="color-item" style="background: #2d3748;">
+                        <div class="color-name">Primary</div>
+                        <div class="color-code">#2d3748</div>
+                    </div>
+                    <div class="color-item" style="background: #4a5568;">
+                        <div class="color-name">Secondary</div>
+                        <div class="color-code">#4a5568</div>
+                    </div>
+                    <div class="color-item" style="background: #f7fafc; color: #2d3748;">
+                        <div class="color-name">Background</div>
+                        <div class="color-code">#f7fafc</div>
+                    </div>
+                    <div class="color-item" style="background: #1a202c;">
+                        <div class="color-name">Text</div>
+                        <div class="color-code">#1a202c</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-frame">
+                <div class="theme-minimal mock-app">
+                    <div class="mock-header">
+                        <div class="mock-logo">Reserve</div>
+                        <nav class="mock-nav">
+                            <a href="#" class="mock-nav-item">店舗検索</a>
+                            <a href="#" class="mock-nav-item">予約履歴</a>
+                            <a href="#" class="mock-nav-item">ログイン</a>
+                        </nav>
+                    </div>
+                    <div class="mock-search">
+                        <div class="search-title">あなたの理想のお店を見つけよう</div>
+                        <div class="search-bar">
+                            <input type="text" class="search-input" placeholder="エリア、ジャンル、店舗名で検索">
+                            <button class="search-btn">検索</button>
+                        </div>
+                    </div>
+                    <div class="mock-content">
+                        <div class="restaurant-grid">
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍝</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">イタリアンダイニング Bella</div>
+                                    <div class="restaurant-desc">本格イタリアンを気軽に楽しめるカジュアルダイニング</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">渋谷</span>
+                                        <span class="tag">イタリアン</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍣</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">寿司処 海月</div>
+                                    <div class="restaurant-desc">厳選された旬のネタで握る本格江戸前寿司</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">銀座</span>
+                                        <span class="tag">和食</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🥘</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">スパイスキッチン Masala</div>
+                                    <div class="restaurant-desc">本場のスパイスを使用した本格インドカレー</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">新宿</span>
+                                        <span class="tag">カレー</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme 2: Warm Hospitality -->
+        <div class="theme-content" id="theme-warm">
+            <div class="theme-info">
+                <h2>Theme 2: Warm Hospitality</h2>
+                <p><strong>コンセプト:</strong> 温かみのある配色と柔らかなフォルムで、親しみやすさとおもてなしの心を表現。訪れる人を優しく迎え入れるような温もりを感じさせるデザインです。</p>
+                <p><strong>推奨ターゲット:</strong> ファミリー層、カジュアルダイニング、地域密着型の店舗、アットホームな雰囲気を求めるユーザー</p>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #2d3748;">カラーパレット</h3>
+                <div class="color-palette">
+                    <div class="color-item" style="background: #ea580c;">
+                        <div class="color-name">Primary</div>
+                        <div class="color-code">#ea580c</div>
+                    </div>
+                    <div class="color-item" style="background: #dc2626;">
+                        <div class="color-name">Secondary</div>
+                        <div class="color-code">#dc2626</div>
+                    </div>
+                    <div class="color-item" style="background: #fffaf5; color: #9a3412;">
+                        <div class="color-name">Background</div>
+                        <div class="color-code">#fffaf5</div>
+                    </div>
+                    <div class="color-item" style="background: #9a3412;">
+                        <div class="color-name">Text</div>
+                        <div class="color-code">#9a3412</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-frame">
+                <div class="theme-warm mock-app">
+                    <div class="mock-header">
+                        <div class="mock-logo">おいしい予約</div>
+                        <nav class="mock-nav">
+                            <a href="#" class="mock-nav-item">店舗を探す</a>
+                            <a href="#" class="mock-nav-item">マイページ</a>
+                            <a href="#" class="mock-nav-item">ログイン</a>
+                        </nav>
+                    </div>
+                    <div class="mock-search">
+                        <div class="search-title">心温まる食事体験を</div>
+                        <div class="search-subtitle">あなたの特別な時間を彩るお店を見つけましょう</div>
+                        <div class="search-bar">
+                            <input type="text" class="search-input" placeholder="お気に入りのお店を探す">
+                            <button class="search-btn">検索</button>
+                        </div>
+                    </div>
+                    <div class="mock-content">
+                        <div class="restaurant-grid">
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍝</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">トラットリア Amore</div>
+                                    <div class="restaurant-desc">家族みんなで楽しめる、笑顔あふれるイタリアン</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">吉祥寺</span>
+                                        <span class="tag">イタリアン</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍣</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">和食処 なごみ</div>
+                                    <div class="restaurant-desc">四季折々の旬の味わいを、心を込めてお届けします</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">自由が丘</span>
+                                        <span class="tag">和食</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🥘</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">カレーハウス ナマステ</div>
+                                    <div class="restaurant-desc">スパイスの香りとともに、幸せのひとときを</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">中野</span>
+                                        <span class="tag">インド料理</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme 3: Premium Luxury -->
+        <div class="theme-content" id="theme-luxury">
+            <div class="theme-info">
+                <h2>Theme 3: Premium Luxury</h2>
+                <p><strong>コンセプト:</strong> 洗練された高級感とエレガンスを追求。ダークトーンとゴールドアクセントで、特別な体験を予感させるプレミアムなデザイン。品格と上質さを重視する方々に最適です。</p>
+                <p><strong>推奨ターゲット:</strong> 高級レストラン、特別な記念日利用、富裕層ユーザー、ラグジュアリーブランド志向の店舗</p>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #2d3748;">カラーパレット</h3>
+                <div class="color-palette">
+                    <div class="color-item" style="background: #cba362;">
+                        <div class="color-name">Primary (Gold)</div>
+                        <div class="color-code">#cba362</div>
+                    </div>
+                    <div class="color-item" style="background: #1e293b;">
+                        <div class="color-name">Secondary</div>
+                        <div class="color-code">#1e293b</div>
+                    </div>
+                    <div class="color-item" style="background: #0f1419;">
+                        <div class="color-name">Background</div>
+                        <div class="color-code">#0f1419</div>
+                    </div>
+                    <div class="color-item" style="background: #b8935a;">
+                        <div class="color-name">Text</div>
+                        <div class="color-code">#b8935a</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-frame">
+                <div class="theme-luxury mock-app">
+                    <div class="mock-header">
+                        <div class="mock-logo">RESERVE</div>
+                        <nav class="mock-nav">
+                            <a href="#" class="mock-nav-item">EXPLORE</a>
+                            <a href="#" class="mock-nav-item">RESERVATIONS</a>
+                            <a href="#" class="mock-nav-item">ACCOUNT</a>
+                        </nav>
+                    </div>
+                    <div class="mock-search">
+                        <div class="search-title">EXCEPTIONAL DINING</div>
+                        <div class="search-subtitle">Discover the finest culinary experiences</div>
+                        <div class="search-bar">
+                            <input type="text" class="search-input" placeholder="Search by location, cuisine, or name">
+                            <button class="search-btn">Search</button>
+                        </div>
+                    </div>
+                    <div class="mock-content">
+                        <div class="restaurant-grid">
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍝</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">Ristorante Eleganza</div>
+                                    <div class="restaurant-desc">Michelin-starred Italian cuisine with unparalleled sophistication</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">ROPPONGI</span>
+                                        <span class="tag">ITALIAN</span>
+                                    </div>
+                                    <button class="book-btn">Reserve</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍣</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">Sushi Kiwami</div>
+                                    <div class="restaurant-desc">Exquisite Edomae sushi crafted by master artisans</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">GINZA</span>
+                                        <span class="tag">SUSHI</span>
+                                    </div>
+                                    <button class="book-btn">Reserve</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🥘</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">Le Château</div>
+                                    <div class="restaurant-desc">Contemporary French gastronomy in an elegant setting</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">AOYAMA</span>
+                                        <span class="tag">FRENCH</span>
+                                    </div>
+                                    <button class="book-btn">Reserve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme 4: Fresh & Vibrant -->
+        <div class="theme-content" id="theme-vibrant">
+            <div class="theme-info">
+                <h2>Theme 4: Fresh & Vibrant</h2>
+                <p><strong>コンセプト:</strong> 鮮やかなグリーンとイエローで、新鮮さと活気を表現。エネルギッシュで楽しい食体験を予感させる、ポジティブで明るいデザイン。若々しく元気な印象を与えます。</p>
+                <p><strong>推奨ターゲット:</strong> カジュアルレストラン、若年層、ヘルシー志向のユーザー、カフェやブランチスポット、活気ある雰囲気を求める店舗</p>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #2d3748;">カラーパレット</h3>
+                <div class="color-palette">
+                    <div class="color-item" style="background: #10b981;">
+                        <div class="color-name">Primary</div>
+                        <div class="color-code">#10b981</div>
+                    </div>
+                    <div class="color-item" style="background: #059669;">
+                        <div class="color-name">Secondary</div>
+                        <div class="color-code">#059669</div>
+                    </div>
+                    <div class="color-item" style="background: #fef3c7; color: #065f46;">
+                        <div class="color-name">Background</div>
+                        <div class="color-code">#fef3c7</div>
+                    </div>
+                    <div class="color-item" style="background: #065f46;">
+                        <div class="color-name">Text</div>
+                        <div class="color-code">#065f46</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-frame">
+                <div class="theme-vibrant mock-app">
+                    <div class="mock-header">
+                        <div class="mock-logo">FreshTable</div>
+                        <nav class="mock-nav">
+                            <a href="#" class="mock-nav-item">探す</a>
+                            <a href="#" class="mock-nav-item">予約</a>
+                            <a href="#" class="mock-nav-item">ログイン</a>
+                        </nav>
+                    </div>
+                    <div class="mock-search">
+                        <div class="search-title">今日もおいしい一日を!</div>
+                        <div class="search-subtitle">新鮮な食材と楽しい時間が待っています</div>
+                        <div class="search-bar">
+                            <input type="text" class="search-input" placeholder="エリア、ジャンル、気分で検索!">
+                            <button class="search-btn">検索</button>
+                        </div>
+                    </div>
+                    <div class="mock-content">
+                        <div class="restaurant-grid">
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🍝</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">Pasta Paradise</div>
+                                    <div class="restaurant-desc">毎日作る自家製パスタで、笑顔とエネルギーをチャージ!</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">原宿</span>
+                                        <span class="tag">パスタ</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🥗</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">Green Bowl Cafe</div>
+                                    <div class="restaurant-desc">オーガニック野菜たっぷり!ヘルシー&デリシャス</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">表参道</span>
+                                        <span class="tag">カフェ</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                            <div class="restaurant-card">
+                                <div class="restaurant-image">🌮</div>
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name">Tacos & Joy</div>
+                                    <div class="restaurant-desc">本場メキシコの味を、もっとカジュアルに楽しく!</div>
+                                    <div class="restaurant-tags">
+                                        <span class="tag">恵比寿</span>
+                                        <span class="tag">メキシカン</span>
+                                    </div>
+                                    <button class="book-btn">予約する</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.theme-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const theme = tab.getAttribute('data-theme');
+
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(`theme-${theme}`).classList.add('active');
+            });
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
