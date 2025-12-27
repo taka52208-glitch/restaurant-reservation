@@ -73,3 +73,26 @@ class RestaurantListResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class RestaurantSalesResponse(BaseModel):
+    """店舗売上レスポンススキーマ"""
+    restaurant_id: str
+    date_from: datetime | None
+    date_to: datetime | None
+    total_sales: int
+    total_reservations: int
+    online_sales: int
+    online_reservations: int
+    onsite_sales: int
+    onsite_reservations: int
+
+
+class AvailabilityResponse(BaseModel):
+    """空席確認レスポンススキーマ"""
+    available: bool
+    restaurant_id: str
+    date: str
+    time: str
+    party_size: int
+    message: str | None = None

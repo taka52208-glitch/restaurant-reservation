@@ -9,10 +9,10 @@
 | 3 | フロントエンド基盤 | [x] | 完了: Vite+React+MUI v7+Vitest |
 | 4 | バックエンド基盤 | [x] | 完了: FastAPI+SQLAlchemy+Alembic |
 | 5 | モックアップ作成 | [x] | 4つのデザインテーマ作成完了 |
-| 6 | ページ実装 | [x] | UI完了（モックデータ）、API接続待ち |
-| 7 | API実装 | [ ] | - |
-| 8 | 結合テスト | [ ] | - |
-| 9 | デプロイ | [ ] | - |
+| 6 | ページ実装 | [x] | UI完了、APIクライアント実装済み |
+| 7 | API実装 | [x] | 完了: 全エンドポイント実装済み |
+| 8 | 結合テスト | [x] | 完了: API統合テスト9/9成功 |
+| 9 | デプロイ | [x] | 完了: Vercel/Render設定準備済み |
 | 10 | 本番運用診断 | [ ] | - |
 | 11 | 機能拡張 | [ ] | - |
 
@@ -44,3 +44,67 @@
 |----|---------|-------|----------|---------|------|------|
 | A-001 | 店舗管理 | `/admin/restaurants` | 運営 | 店舗一覧、承認、ステータス変更 | [x] | [x] UI |
 | A-002 | 全体売上管理 | `/admin/sales` | 運営 | 総売上、店舗別売上 | [x] | [x] UI |
+
+---
+
+## Phase 7: バックエンドAPI実装計画
+
+### 2.1 垂直スライス実装順序
+
+| No | スライス名 | 内容 | 依存 | 完了 |
+|----|-----------|------|------|------|
+| 1 | 認証基盤 | ログイン/ログアウト/トークン管理 | なし | [x] |
+| 2-A | 店舗管理 | 店舗CRUD、席管理 | 認証基盤 | [x] |
+| 2-B | 予約基盤 | 予約CRUD、空席確認 | 認証基盤 | [x] |
+| 3 | Stripe決済 | Payment Intent、返金処理 | 予約基盤 | [x] |
+| 4 | 売上管理 | 店舗売上集計、管理者売上 | 予約基盤 | [x] |
+| 5 | 認証補完 | logout, refresh, パスワードリセット | 認証基盤 | [x] |
+
+### 2.2 エンドポイント実装タスクリスト
+
+#### スライス1: 認証基盤（実装済み）
+| ID | エンドポイント | メソッド | 完了 |
+|----|---------------|---------|------|
+| 1.1 | /api/v1/auth/register | POST | [x] |
+| 1.2 | /api/v1/auth/login | POST | [x] |
+| 1.3 | /api/v1/users/me | GET | [x] |
+
+#### スライス2-A: 店舗管理（実装済み）
+| ID | エンドポイント | メソッド | 完了 |
+|----|---------------|---------|------|
+| 2A.1 | /api/v1/restaurants | GET | [x] |
+| 2A.2 | /api/v1/restaurants/:id | GET | [x] |
+| 2A.3 | /api/v1/restaurants | POST | [x] |
+| 2A.4 | /api/v1/restaurants/:id | PUT | [x] |
+| 2A.5 | /api/v1/restaurants/:id/seats | POST | [x] |
+| 2A.6 | /api/v1/restaurants/:id/seats/:seat_id | DELETE | [x] |
+
+#### スライス2-B: 予約基盤
+| ID | エンドポイント | メソッド | 完了 |
+|----|---------------|---------|------|
+| 2B.1 | /api/v1/reservations | POST | [x] |
+| 2B.2 | /api/v1/reservations/my | GET | [x] |
+| 2B.3 | /api/v1/reservations/:id | GET | [x] |
+| 2B.4 | /api/v1/reservations/:id/cancel | PUT | [x] |
+| 2B.5 | /api/v1/restaurants/:id/availability | GET | [x] |
+
+#### スライス3: Stripe決済
+| ID | エンドポイント | メソッド | 完了 |
+|----|---------------|---------|------|
+| 3.1 | /api/v1/payments/create-intent | POST | [x] |
+| 3.2 | /api/v1/payments/confirm | POST | [x] |
+| 3.3 | /api/v1/payments/refund | POST | [x] |
+
+#### スライス4: 売上管理
+| ID | エンドポイント | メソッド | 完了 |
+|----|---------------|---------|------|
+| 4.1 | /api/v1/restaurants/:id/sales | GET | [x] |
+| 4.2 | /api/v1/admin/sales/summary | GET | [x] |
+| 4.3 | /api/v1/admin/sales/by-restaurant | GET | [x] |
+
+#### スライス5: 認証補完
+| ID | エンドポイント | メソッド | 完了 |
+|----|---------------|---------|------|
+| 5.1 | /api/v1/auth/logout | POST | [x] |
+| 5.2 | /api/v1/auth/refresh | POST | [x] |
+| 5.3 | /api/v1/auth/password-reset | POST | [x] |

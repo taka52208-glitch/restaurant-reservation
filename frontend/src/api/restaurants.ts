@@ -26,6 +26,39 @@ interface CreateSeatRequest {
   capacity: number;
 }
 
+interface AvailabilityParams {
+  date: string;
+  time: string;
+  party_size: number;
+}
+
+interface AvailabilityResponse {
+  available: boolean;
+  restaurant_id: string;
+  date: string;
+  time: string;
+  party_size: number;
+  message: string | null;
+}
+
+interface StoreSalesParams {
+  date_from?: string;
+  date_to?: string;
+}
+
+interface StoreSalesResponse {
+  restaurant_id: string;
+  restaurant_name: string;
+  total_sales: number;
+  total_reservations: number;
+  completed_reservations: number;
+  cancelled_reservations: number;
+  period: {
+    from: string;
+    to: string;
+  };
+}
+
 export const restaurantsApi = {
   getList: async (params?: RestaurantListParams): Promise<Restaurant[]> => {
     const { data } = await apiClient.get<Restaurant[]>('/restaurants', { params });
@@ -59,5 +92,15 @@ export const restaurantsApi = {
 
   deleteSeat: async (restaurantId: string, seatId: string): Promise<void> => {
     await apiClient.delete(`/restaurants/${restaurantId}/seats/${seatId}`);
+  },
+
+  getAvailability: async (restaurantId: string, params: AvailabilityParams): Promise<AvailabilityResponse> => {
+    const { data } = await apiClient.get<AvailabilityResponse>(`/restaurants/${restaurantId}/availability`, { params });
+    return data;
+  },
+
+  getStoreSales: async (restaurantId: string, params?: StoreSalesParams): Promise<StoreSalesResponse> => {
+    const { data } = await apiClient.get<StoreSalesResponse>(`/restaurants/${restaurantId}/sales`, { params });
+    return data;
   },
 };
